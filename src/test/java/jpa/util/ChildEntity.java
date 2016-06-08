@@ -1,10 +1,24 @@
 package jpa.util;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class ChildEntity extends Identity {
+public class ChildEntity extends ParentEntity {
+
+    public ChildEntity() {
+    }
+
+    public ChildEntity(String parentNameA) {
+        this.parentNameA = parentNameA;
+    }
+
+    protected String parentNameA;
+
+    public String getParentNameA() {
+        return parentNameA;
+    }
+
+    public void setParentNameA(String parentNameA) {
+        this.parentNameA = parentNameA;
+    }
 }

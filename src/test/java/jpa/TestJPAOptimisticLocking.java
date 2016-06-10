@@ -70,6 +70,7 @@ public class TestJPAOptimisticLocking extends BaseJPATest {
 
         try {
             em2.getTransaction().commit();
+            Assert.fail();
         } catch (RollbackException e) {
             Assert.assertTrue(e.getCause() instanceof OptimisticLockException);
             e.printStackTrace();

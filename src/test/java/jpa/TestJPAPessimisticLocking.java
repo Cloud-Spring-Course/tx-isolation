@@ -37,9 +37,6 @@ public class TestJPAPessimisticLocking extends BaseJPATest {
         // Lock object, separate SELECT ... LOCK FOR SHARE MODE is executed
         em1.lock(em1Entity, LockModeType.PESSIMISTIC_READ);
 
-        // Read second entity with locking
-        em1.find(TestEntity.class, entity2.getId(), LockModeType.PESSIMISTIC_READ);
-
         // Try to read and modify it in em2
         TestEntity em2Entity = em2.find(TestEntity.class, entity.getId(), LockModeType.PESSIMISTIC_READ);
         em2Entity.setName("changed by em2");
@@ -60,13 +57,9 @@ public class TestJPAPessimisticLocking extends BaseJPATest {
         em1.getTransaction().begin();
         em2.getTransaction().begin();
 
-        // We only got data, haven't block it already
-        TestEntity em1Entity = em1.find(TestEntity.class, entity.getId());
-        // Lock object, separate SELECT ... LOCK FOR SHARE MODE is executed
-        em1.lock(em1Entity, LockModeType.PESSIMISTIC_WRITE);
+        em1.find(TestEntity.class, entity.getId(), LockModeType.PESSIMISTIC_WRITE);
 
         try {
-            // Try to read same entity in different transaction
             em2.find(entity.getClass(), entity.getId(), LockModeType.PESSIMISTIC_WRITE);
             Assert.fail("No timeout exception");
         } catch (LockTimeoutException e) {
